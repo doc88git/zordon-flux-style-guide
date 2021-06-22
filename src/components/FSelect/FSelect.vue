@@ -304,20 +304,18 @@ export default {
 
   watch: {
     displayOptions(display) {
-      this.searchQuery = ''
-
       if (display) this.sortOptions()
       else this.emitBlur()
     },
     value: {
-      handler: function(newValue) {
+      handler: function (newValue) {
         this.internalValue = newValue
       },
       deep: true,
       immediate: true
     },
     internalValue: {
-      handler: function(newValue) {
+      handler: function (newValue) {
         this.$emit('input', newValue)
       },
       deep: true
