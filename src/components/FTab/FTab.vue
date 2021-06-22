@@ -10,7 +10,7 @@
           ref="btnGroup"
           :tab="!fill"
           :options="options"
-          :default="initialValue"
+          :default.sync="selected"
           v-bind="$attrs"
           @change="setSelected"
         />
@@ -53,7 +53,7 @@ export default {
     fill: Boolean,
     options: Array,
     noSeparator: Boolean,
-    initialValue: {
+    value: {
       type: [Number, String],
       default: 1
     }
@@ -63,33 +63,35 @@ export default {
 
   computed: {
     headerSize() {
-      console.log({ b: this.$refs.tabHeader })
       return this.$refs.tabHeader && this.$refs.tabHeader.$el
         ? this.$refs.tabHeader.$el.clientWidth
         : 0
     },
     btnGroupSize() {
-      console.log({ b: this.$refs.btnGroup })
       return this.$refs.btnGroup && this.$refs.btnGroup.$el
         ? this.$refs.btnGroup.$el.clientWidth
         : 0
     }
   },
 
+  created() {
+    this.selected = this.value || 1
+  },
+
   methods: {
     setSelected(id) {
       this.selected = id
       this.$emit('change', id)
+      this.$emit('input', id)
     },
     drag(e) {
-      console.log(this.$refs)
-      console.log({ e })
+      return e
     },
     stopDrag(e) {
-      console.log({ e })
+      return e
     },
     userSwiped(e) {
-      console.log({ userSwiped: e })
+      return e
     }
   }
 }
@@ -102,6 +104,7 @@ export default {
     align-items: flex-end;
     justify-content: space-between;
     overflow: auto;
+    margin-bottom: 0px;
   }
 }
 </style>

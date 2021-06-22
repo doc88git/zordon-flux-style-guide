@@ -1,60 +1,63 @@
 <template>
-  <span class="f-icon">
-    <f-icon-material
-      v-if="lib === 'material'"
-      v-bind="{ name: $props.name, type: $props.type }"
-      :class="classes"
-    />
-    <f-icon-flux
-      v-if="lib === 'flux'"
-      v-bind="{ name: $props.name, type: $props.type }"
-      :class="classes"
-      :color="color"
-      :size="iconSize"
-      :clickable="clickable"
-    />
-  </span>
+  <component
+    :is="isComponent"
+    v-bind="{ name: $props.name, type: $props.type }"
+    :class="classes"
+    :color="color"
+    :size="iconSize"
+    :clickable="clickable"
+    class="f-icon"
+  />
 </template>
 
 <script>
-import FIconFlux from './components/FIconFlux'
-import FIconMaterial from './components/FIconMaterial'
-
 export default {
   name: 'f-icon',
-  components: {
-    FIconMaterial,
-    FIconFlux
-  },
   props: {
+    /**
+     * The color for the icon.
+     */
     color: {
       type: String,
       deafult: 'primary'
     },
+    /**
+     * The lib used for icon
+     * @values flux, material
+     */
     lib: {
       default: 'material',
       validator: val => ['flux', 'material'].includes(val)
     },
-    type: {
-      default: 'default',
-      type: String
-    },
+    /**
+     * The size of icon
+     * @values xs, sm, base, lg, xl, 2xl
+     */
     size: {
       type: String,
       default: 'base',
       validator: val => ['xs', 'sm', 'base', 'lg', 'xl', '2xl'].includes(val)
     },
+    /**
+     * The file name of icon
+     */
     name: {
-      default: 'hardware',
       type: String,
       required: true
     },
+    /**
+     * If icon is clickable, for opacity on mouse over
+     */
     clickable: {
       type: Boolean,
       default: false
     }
   },
   computed: {
+    isComponent() {
+      const c = this.lib === 'flux' ? 'FIconFlux' : 'FIconMaterial'
+      return () => import(`./${c}`)
+    },
     classes() {
       return {
         [`color--fill--${this.color}`]: !!this.color,
@@ -65,12 +68,12 @@ export default {
     },
     iconSize() {
       /* icon sizes
-        xs: 8
-        sm: 12
-        base: 16
-        lg: 24
-        xl: 32
-        2xl: 48
+        xs: 8px
+        sm: 12px
+        base: 16px
+        lg: 24px
+        xl: 32px
+        2xl: 48px
       */
       return ['xs', 'base', 'xl'].includes(this.size) ? 16 : 24
     }

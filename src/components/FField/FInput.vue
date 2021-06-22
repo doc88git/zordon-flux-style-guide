@@ -1,38 +1,58 @@
 <template>
-  <component
-    :is="componentIs"
-    :type="type"
-    :class="classes"
-    :disabled="disabled"
-    :readonly="readonly"
-    :name="name"
-    v-html="['textarea'].includes(type) && value"
-    v-bind="[$attrs, $props]"
-    @input="runMask"
-    @focus="$emit('focus', $event)"
-    @blur="$emit('blur', $event)"
-    @keyup="$emit('keyup', $event)"
-    class="f-input"
-    ref="input"
-  />
+  <f-field
+    :is-active="!!value || hasFocus"
+    :label-style="labelStyle"
+    v-bind="$attrs"
+  >
+    <template v-for="slotName in fieldSlots" :slot="slotName">
+      <slot v-if="$slots[slotName]" :name="slotName" />
+    </template>
+
+    <component
+      :is="componentIs"
+      :type="type"
+      :class="classes"
+      :disabled="disabled"
+      :readonly="readonly"
+      :name="name"
+      v-html="['textarea'].includes(type) && value"
+      v-bind="[$attrs, $props]"
+      @input="runMask"
+      @focus="emitFocus"
+      @blur="emitBlur"
+      @keyup="$emit('keyup', $event)"
+      class="f-input"
+      ref="input"
+    />
+  </f-field>
 </template>
 
 <script>
+import FField from './FField'
 import MaskMixin from '../../mixins/mask.js'
 
 export default {
   name: 'f-input',
-  components: {},
+
+  components: { FField },
+
   mixins: [MaskMixin],
+
   data() {
     return {
+      hasFocus: false,
       innerValue: this.__getInitialMaskedValue()
     }
   },
+
   props: {
     value: [String, Number],
     disabled: Boolean,
     readonly: Boolean,
+    labelStyle: {
+      type: String,
+      default: 'floating'
+    },
     name: {
       default: '',
       type: String,
@@ -83,9 +103,20 @@ export default {
         'f-input--readonly': this.readonly,
         'f-input--disabled': this.disabled
       }
+    },
+    fieldSlots() {
+      return ['before', 'after', 'label', 'append', 'error', 'hint']
     }
   },
   methods: {
+    emitFocus(ev) {
+      this.hasFocus = true
+      this.$emit('focus', ev)
+    },
+    emitBlur(ev) {
+      this.hasFocus = false
+      this.$emit('focus', ev)
+    },
     runMask(e) {
       let value = e.target.value
 
@@ -104,15 +135,14 @@ export default {
 .f-input {
   border-width: 1px;
   border-radius: 0.25rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
   color: var(--color-font-base);
   line-height: 1.25;
-  height: 100%;
-  display: inline;
+  display: inline-block;
   width: 100%;
+  height: 48px;
+
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 
   &:focus {
     outline: 0;

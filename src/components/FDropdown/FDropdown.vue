@@ -1,27 +1,16 @@
 <template>
-  <div class="f-dropdown" :class="classes">
-    <div class="f-dropdown__wrapper">
-      <div
-        class="f-dropdown__inner"
-        :class="{
-          'f-dropdown__inner--opened': isOpen
-        }"
-        @click="toggleDropdown"
-      >
-        <div class="f-dropdown__inner__content">
-          <slot>{{ labelSelected }}</slot>
-        </div>
-        <div v-if="caret" class="f-dropdown__inner__append">
-          <f-icon
-            v-show="!clearable"
-            :name="iconName"
-            :color="gray ? 'gray-600' : iconColor"
-          />
-        </div>
+  <div class="f-dropdown" :class="classes" @click="toggleDropdown">
+    <div
+      class="f-dropdown__inner"
+      :class="{
+        'f-dropdown__inner--opened': isOpen
+      }"
+    >
+      <div class="f-dropdown__inner__content">
+        <slot>{{ labelSelected }}</slot>
       </div>
-
-      <div v-if="clearable" class="f-dropdown__wrapper__append" @click="clear">
-        <f-icon name="close" :color="gray ? 'gray-600' : iconColor" />
+      <div v-if="caret" class="f-dropdown__inner__append">
+        <f-icon :name="iconName" :color="gray ? 'gray-600' : iconColor" />
       </div>
     </div>
     <transition :name="`slide-${position}`">
@@ -63,11 +52,19 @@ export default {
     list: {
       type: Array,
       required: true,
-      validator: list => list.every(item => 'label' in item && 'value' in item)
-    },
-    clearable: {
-      type: Boolean,
-      default: false
+      validator: list => {
+        let required = ['label', 'value']
+
+        let filter = list.filter(() => {
+          return (
+            list.filter(item => {
+              return required.filter(r => !!item[r]).length === required.length
+            }).length === list.length
+          )
+        })
+
+        return filter.length === list.length
+      }
     },
     // iconStatus: {
     //   type: String,
@@ -157,9 +154,6 @@ export default {
     }
   },
   methods: {
-    clear() {
-      this.$emit('clear')
-    },
     onEnter(e) {
       if (e.keyCode === 13) {
         this.selectItem()
@@ -255,16 +249,6 @@ export default {
   &:focus {
     box-shadow: none;
     outline: 0;
-  }
-  &__wrapper {
-    &__append {
-      position: absolute;
-      top: 50%;
-      z-index: 1;
-      margin-top: -6px;
-      right: 10px;
-      cursor: pointer;
-    }
   }
   &__inner {
     display: flex;

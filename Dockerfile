@@ -1,17 +1,15 @@
-FROM node:11.15-alpine
+FROM node:13.3-alpine
 
 ENV YARN_VERSION 1.16.0
-
-ENV HOST 0.0.0.0
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 COPY . .
 
-EXPOSE 3001
+RUN yarn docs:build
 
-CMD [ "npm", "run", "storybook" ]
+# static file will be in docs/.vuepress/dist

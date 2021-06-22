@@ -4,9 +4,10 @@
       v-for="opt in options"
       :key="opt.value"
       @click="change(opt.value)"
+      :icon="opt.icon"
       :class="{
         ...classes,
-        'f-button-group__tab--selected': isFlat && opt.value === selected
+        'f-button-group__tab--selected': hasSelectedClass(opt.value)
       }"
       v-bind="btnOptions(opt.value)"
     >
@@ -20,9 +21,11 @@ import FButton from './FButton'
 
 export default {
   name: 'f-button-group',
+
   components: {
     FButton
   },
+
   props: {
     options: {
       type: Array,
@@ -37,12 +40,14 @@ export default {
     },
     size: {
       type: String,
-      default: ''
+      default: 'default'
     }
   },
+
   data: () => ({
     selected: null
   }),
+
   computed: {
     isOutline() {
       return this.outline
@@ -59,14 +64,35 @@ export default {
       }
     }
   },
-  created() {
-    if (this.default !== null && this.default !== undefined)
-      this.change(this.default)
+
+  watch: {
+    selected() {
+      // TODO medida paliativa para um v-model
+      this.$emit('update:default', this.selected)
+    },
+    default() {
+      this.changeDefault()
+    }
   },
+
+  created() {
+    this.changeDefault()
+  },
+
   methods: {
+    hasSelectedClass(value) {
+      return this.isFlat && Number(value) === Number(this.selected)
+    },
+
+    changeDefault() {
+      if (this.default !== null && this.default !== undefined) {
+        this.change(this.default)
+      }
+    },
     change(value) {
       this.selected = value
       this.$emit('change', this.selected)
+      this.$emit('input', this.selected)
     },
     btnOptions(id) {
       let mustBeO = true
