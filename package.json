@@ -21,11 +21,6 @@
     "docs:dev": "vuepress dev docs --no-cache",
     "docs:build": "vuepress build docs"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn eslint && yarn test && yarn predocs:dev"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/doc88git/flux-style-guide.git"
@@ -77,7 +72,6 @@
     "eslint-loader": "^3.0.3",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^6.1.2",
-    "husky": "^4.2.3",
     "jest": "^24.8.0",
     "jest-transform-stub": "^2.0.0",
     "markdown-it": "^11.0.0",
