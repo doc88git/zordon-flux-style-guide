@@ -1,7 +1,6 @@
 {
   "name": "@doc88/flux-style-guide",
-  "version": "2.1.0-beta.5",
-  "license": "MIT",
+  "version": "1.0.0",
   "module": "src/index.esm.js",
   "main": "src/index.umd.js",
   "scripts": {
@@ -25,13 +24,6 @@
     "hooks": {
       "pre-commit": "yarn eslint && yarn test && yarn predocs:dev"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/doc88git/flux-style-guide.git"
-  },
-  "bugs": {
-    "url": "https://github.com/doc88git/flux-style-guide/issues"
   },
   "dependencies": {
     "@doc88/flux-icon": "^1.4.8",
@@ -98,8 +90,5 @@
     "vuepress": "^1.4.0",
     "vuepress-bar": "^0.3.1",
     "write-file-webpack-plugin": "^4.5.1"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
   }
 }
