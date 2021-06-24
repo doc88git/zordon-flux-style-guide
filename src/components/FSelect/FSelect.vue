@@ -308,14 +308,14 @@ export default {
       else this.emitBlur()
     },
     value: {
-      handler: function (newValue) {
+      handler: function(newValue) {
         this.internalValue = newValue
       },
       deep: true,
       immediate: true
     },
     internalValue: {
-      handler: function (newValue) {
+      handler: function(newValue) {
         this.$emit('input', newValue)
       },
       deep: true
@@ -346,7 +346,10 @@ export default {
       this.displayOptions = !this.displayOptions
     },
     removeItem({ option }) {
-      if (!this.multiple) return
+      if (!this.multiple) {
+        this.internalValue = null
+        return
+      }
 
       const index = (this.value || []).indexOf(option[this.trackBy])
       const value = JSON.parse(JSON.stringify(this.value || []))
