@@ -80,6 +80,10 @@ export default {
     background-color: #f0f0f0;
   }
 
+  &--selected {
+    font-weight: 600;
+  }
+
   &__label {
     flex-shrink: 0;
     user-select: none;
