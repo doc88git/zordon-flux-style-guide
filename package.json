@@ -1,6 +1,6 @@
 {
   "name": "@doc88/flux-style-guide",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "module": "src/index.esm.js",
   "main": "src/index.umd.js",
   "scripts": {
