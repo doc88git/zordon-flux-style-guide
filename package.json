@@ -1,5 +1,5 @@
 {
-  "name": "@doc88/zordon-flux-style-guide",
+  "name": "zordon-flux-style-guide",
   "version": "2.0.0",
   "module": "src/index.esm.js",
   "main": "src/index.umd.js",
